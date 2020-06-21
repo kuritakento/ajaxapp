@@ -2,16 +2,19 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
   end
-
-  def new
-  end
-
   def create
-    Post.create(post_params)
+    post = Post.create(content: params[:content], checked: false)
+    render json:{ post: post }
   end
+  def checked
+    post = Post.find(params[:id])
+    if post.checked then
+      post.update(checked: false)
+    else
+      post.update(checked: true)
+    end
 
-  private
-  def post_params
-    params.permit(:content)
+    item = Post.find(params[:id])
+    render json:{ post: item }
   end
 end
